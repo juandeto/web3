@@ -1,0 +1,35 @@
+@import 'styles/index.scss';
+
+
+.mainHeader__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 80px;
+    margin: 0 auto 30px;
+    background: $background;
+    .mainHeader__socialMedia{
+        .mainHeader__icon{
+            margin: 0 16px;
+            a {
+                padding: 4px;
+                color: $text;
+                font-size: $small-font;
+
+            }
+        }
+    }
+}
+
+.logo{
+    margin-left: 16px;
+    color: $white-color;
+}
+
+
+@media screen and (min-width: 500px) {
+    .mainHeader__container {
+        width: 85%;
+    }
+  }

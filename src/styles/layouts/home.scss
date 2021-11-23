@@ -1,0 +1,57 @@
+@import '../index.scss';
+
+.landing__container{
+    min-height: 100vh;
+    background: $background;
+    padding: 0 16px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    .landing__title{
+        h1{
+            display: block;
+            font-size: $big-font;
+            text-align: left;
+        }
+        p{  
+            margin: 1em 0;
+            font-size: $medium-font;
+            line-height: 30px;
+            max-width: 400px;
+            .highligth {
+                color: $primary;
+            }
+        }
+    }
+    .landing__connect{
+        margin-top: 16px;
+    }
+
+    .landing__img{
+        display: flex;
+        align-items: center;
+        width: 100%;
+        min-height: 60vh;
+        padding: 16px 8px;
+        img {
+            margin: auto;
+            width: 100%;
+            object-fit: contain;
+        }
+    }
+}
+
+
+
+
+@media screen and (min-width: 500px) {
+    .landing__container{
+        .landing__titles{
+            width: 50%;
+        }
+        .landing__img{
+            width: 40%;
+        }
+    }
+  }

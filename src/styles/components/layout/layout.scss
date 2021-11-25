@@ -60,3 +60,32 @@
         }
     }
 }
+
+
+
+.walletTarget_container{
+    padding: 4px;
+    width: 100%;
+    .walletTarget_label{
+        text-align: left;
+        font-size: $medium-font;
+        color: $text;
+    }
+    .walletTarget_actions{
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        width: 90%;
+        padding: 8px 0;
+        .walletTarget_value {
+            width: 85%;
+        }
+        button {
+            margin: 0 8px;
+        }
+    }
+    .walletTarget_invalid{
+        color: $primary;
+        font-weight: bold;
+    }
+}

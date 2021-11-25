@@ -1,11 +1,14 @@
 import {useEffect, useContext, useState} from 'react'
 import { NetworkContext } from 'config/networkContext'
 import { connect } from 'react-redux'
-import { getBalance as getBalanceAction, setUsdcErrorOnFetchBalance, setDaiErrorOnFetchBalance } from 'store/userWallet/actions'
+import { Tokens, TokenBalance, ErrorOnFetch } from 'store/userWallet/types'
+import { getBalance as getBalanceAction, setErrorOnFetchBalance} from 'store/userWallet/actions'
 import { ApplicationState } from 'store'
+import FormattedBalance from 'components/shared/FormattedBalance'
 import ErrorModal from 'components/shared/ErrorModal'
+import { useContract } from 'config/ContractHook'
 import { PayloadBalance } from 'store/userWallet/types'
-
+import { Contract } from '@ethersproject/contracts'
 import 'styles/components/layout/layout.scss'
 
 
@@ -13,21 +16,18 @@ const usdcAddress: string = process.env.REACT_APP_USDCD_ADDRESS as string
 const daiAddress: string = process.env.REACT_APP_DAI_ADDRESS as string
 
 interface PropsFromState {
-    usdcBalance?: string | undefined
-    daiBalance?: string | undefined
-    errorOnFetchUsdc?: TypeError | string
-    errorOnFetchDai?: TypeError | string
+    tokens?: TokenBalance[]
+    errorOnFetch?: ErrorOnFetch
 }
 
 interface PropsFromDispatch {
     getBalance: typeof getBalanceAction
-    setDaiErrorOnFetchBalance: typeof setDaiErrorOnFetchBalance
-    setUsdcErrorOnFetchBalance: typeof setUsdcErrorOnFetchBalance
+    setErrorOnFetchBalance: typeof setErrorOnFetchBalance
 }
 
 type ModalState ={
     show: boolean,
-    type: TypeError | null,
+    type: any,
     msg: string
   }
 
@@ -36,6 +36,8 @@ type AllProps = PropsFromState & PropsFromDispatch
 
 const Balances: React.FC<AllProps> = (props) => {
     const [showModal, setShowModal] = useState<ModalState>({show: false, type: null, msg: ""})
+    const contractUsdc = useContract(usdcAddress)
+    const contractDai = useContract(daiAddress)
 
     const {
         signingProvider,
@@ -43,22 +45,28 @@ const Balances: React.FC<AllProps> = (props) => {
       } = useContext(NetworkContext)
 
     const {
+      tokens, 
+      errorOnFetch,
       getBalance
     } = props
     
-    const getCoinBalance = (address: string, decimals: number) => {
+
+    const getCoinBalance = (contract: Contract | undefined, name: Tokens) => {
       const data: PayloadBalance = {
-       contractAddress: address,
-       signingProvider: signingProvider,
+       contract: contract,
        userAddress: userAddress,
-       decimals: decimals
+       tokenName: name
      }
      getBalance(data)
    }
 
+
    const resetError = () => {
-    setUsdcErrorOnFetchBalance("")
-    setDaiErrorOnFetchBalance("")
+     console.log('resetea el error')
+    setErrorOnFetchBalance({
+      error: null,
+      tokenName: undefined
+    })
    }
 
    const closeModal = () => {
@@ -69,45 +77,33 @@ const Balances: React.FC<AllProps> = (props) => {
       })
    }
 
-    useEffect(() => {
-      getCoinBalance(usdcAddress, 6)
+  useEffect(() => {
+      getCoinBalance(contractUsdc, "USDC")
+      getCoinBalance(contractDai, "DAI")
     }, [signingProvider, userAddress])
 
-    useEffect(() => {
-      getCoinBalance(daiAddress, 18)
-    }, [signingProvider, userAddress])
+
 
     useEffect(() => {
-      if(props.errorOnFetchDai instanceof Error){
+      if(errorOnFetch?.error){
         setShowModal({
           show: true,
-          type: props.errorOnFetchDai,
-          msg: "Hubo un error al intentar cargar su balance de DAI"
+          type: errorOnFetch?.error,
+          msg: `Hubo un error al intentar cargar sus balances de ${errorOnFetch?.tokenName || "algunos tokens" }`
         })
-      }else if(props.errorOnFetchUsdc instanceof Error){
-        setShowModal({
-          show: true,
-          type: props.errorOnFetchUsdc,
-          msg: "Hubo un error al intentar cargar su balance de USDC"
-        })
-      }else{
+      } else {
         closeModal()
       }
-    },[props.errorOnFetchDai, props.errorOnFetchUsdc])
+    },[errorOnFetch])
 
-const parseBalance = (str:string | undefined) => parseInt(str || "").toFixed(2)
+
 
       return <>
                 <div className="balances_container">
-                    <h3>Your account balances:</h3>
-                    <div className="balances_wrapper">
-                        <h3>{parseBalance(props.usdcBalance) || 0.00}</h3>
-                        <p>USDC</p>
-                    </div>
-                    <div className="balances_wrapper">
-                        <h3>{parseBalance(props.daiBalance) || 0.00}</h3>
-                        <p>DAI</p>
-                    </div>
+                  <h3>Your account balances:</h3>
+                  {
+                  tokens?.map((token: TokenBalance )=> <FormattedBalance token={token}/>)
+                  }
                 </div>
                 <ErrorModal 
                 type={showModal.type} 
@@ -122,17 +118,14 @@ const parseBalance = (str:string | undefined) => parseInt(str || "").toFixed(2)
 
 
 const mapStateToProps = ({ wallet }: ApplicationState) => ({
-    usdcBalance: wallet.usdcBalance,
-    daiBalance: wallet.daiBalance,
-    errorOnFetchUsdc: wallet.errorOnFetchUsdc,
-    errorOnFetchDai: wallet.errorOnFetchDai,
+    tokens: wallet.tokens,
+    errorOnFetc: wallet.errorOnFetch,
   })
   
 
 const mapDispatchToProps: PropsFromDispatch = {
     getBalance:  getBalanceAction,
-    setUsdcErrorOnFetchBalance: setUsdcErrorOnFetchBalance,
-    setDaiErrorOnFetchBalance:setDaiErrorOnFetchBalance
+    setErrorOnFetchBalance: setErrorOnFetchBalance
 }
 
 export default connect(

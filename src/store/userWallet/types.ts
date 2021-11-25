@@ -1,20 +1,15 @@
-import { Web3Provider } from '@ethersproject/providers'
+import { Contract } from '@ethersproject/contracts'
+
 
 export enum BalancesActionTypes {
     GET_BALANCE = '@@userWallet/GET_BALANCE',
-    USDC_FETCH_SUCCESS = '@@userWallet/USDC_FETCH_BALANCE',
-    DAI_FETCH_SUCCESS = '@@userWallet/DAI_FETCH_BALANCE',
-    SET_ERROR_ON_FETCH_DAI = '@@userWallet/SET_ERROR_ON_FETCH_DAI',
-    SET_ERROR_ON_FETCH_USDC = '@@userWallet/SET_ERROR_ON_FETCH_USDC'
+    BALANCE_FETCH_SUCCESS = '@@userWallet/BALANCE_FETCH_SUCCESS',
+    SET_ERROR_ON_FETCH = '@@userWallet/SET_ERROR_ON_FETCH',
 }
 
 
-export interface PayloadBalance {
-    contractAddress: string
-    signingProvider?: Web3Provider
-    userAddress?: string
-    decimals: number
-}
+export type Tokens = "USDC" | "DAI" | undefined
+
 
 export interface ActionBalance {
     error?: any
@@ -23,10 +18,28 @@ export interface ActionBalance {
     type: BalancesActionTypes
 }
 
+
+export interface PayloadBalance {
+    contract?: Contract
+    userAddress?: string
+    tokenName: Tokens
+}
+
+
+export interface TokenBalance {
+    name: Tokens
+    balance: string
+}
+
+
+export interface ErrorOnFetch {
+    error: any,
+    tokenName: Tokens
+}
+
+
 export interface WalletBalances {
-    readonly usdcBalance: string
-    readonly daiBalance: string
-    readonly errorOnFetchUsdc?: TypeError | string
-    readonly errorOnFetchDai?: TypeError | string
+    readonly tokens: TokenBalance[]
+    readonly errorOnFetch: ErrorOnFetch
 }
   

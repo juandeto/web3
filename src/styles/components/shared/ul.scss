@@ -31,16 +31,32 @@
 }
 
 .secondary-button {
-  border-width: 3px;
   border-color: $secondary;
   font-weight: bold;
   cursor: pointer;
   color: $secondary;
   background: $white-color;
+  
 }
 
 
-
+.secondary-button:disabled,
+.secondary-button[disabled],
+.primary-button:disabled,
+.primary-button[disabled]{
+  position: relative;
+  border: 0;
+  padding: 12px 16px;
+  border-radius: 6px;
+  border-bottom-width: 3px;
+  border-style: solid;
+  border-color: $dark-background;
+  cursor: pointer;
+  margin-top: 0;
+  color: $background;
+  letter-spacing: 0.05rem;
+  background: $lighter-background;
+}
 
 
 .tooltipIcon {

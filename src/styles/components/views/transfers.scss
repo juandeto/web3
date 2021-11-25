@@ -3,10 +3,10 @@
 
 .transfers__container{
     min-height: 100vh;
+    display: flex;
 }
 
 .transfers__walletInfo{
-    position: fixed;
     left: 1%;
     display: flex;
     flex-direction: column;
@@ -15,4 +15,9 @@
     height: 80%;
     border: 1px solid $primary;
     border-radius: 3px;
+}
+
+.transfers__wrapper{
+    width: 85%;
+    padding: 8px 16px;
 }

@@ -1,18 +1,27 @@
+import * as React from 'react'
 import { NetworkContext } from 'config/networkContext'
 import { useContext } from 'react'
-
+import { useHistory } from 'react-router-dom';
 import WalletWidget from 'components/layout/WalletWidget'
+import Button from 'components/shared/ul/Button'
+import 'styles/components/layout/layout.scss'
 
-export default function Account() {
+
+
+const Account: React.FC = () => {
+  const history = useHistory();
   const {
     signingProvider,
     userAddress,
-    onSelectWallet,
-    onLogOut
+    onSelectWallet
   } = useContext(NetworkContext)
 
+  const goToTransfers = () => {
+    return history.replace('/transfers')
+  }
+
   return (
-    <div>
+    <>
       <div>
         {userAddress && (
           <div>
@@ -21,12 +30,16 @@ export default function Account() {
         )}
         <div>
           {!signingProvider ? (
-            <button className="button-primary" onClick={onSelectWallet}>Connect</button>
+            <Button type="primary" cta={onSelectWallet} label="Connect your wallet"/>
           ) : (
-            <button className="button-secondary" onClick={onLogOut}>Logout</button>
+            <Button type="secondary" cta={goToTransfers} label="Start here"/>
           )}
         </div>
       </div>
-    </div>
+    </>
   )
 }
+
+
+
+export default Account;

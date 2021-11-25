@@ -1,18 +1,17 @@
 import { Web3Provider } from '@ethersproject/providers'
 import { NetworkContext } from 'config/networkContext'
-import { ChildElems } from 'models/child-elems'
 import { useEffect, useState } from 'react'
 import { initOnboard } from 'utils/onboard'
 import { API, Subscriptions, Wallet } from 'bnc-onboard/dist/src/interfaces'
 
 const KEY_SELECTED_WALLET = 'selectedWallet'
-
+type ChildElems = (JSX.Element | null) | (JSX.Element | null)[]
 
 export default function Network({ children }: { children: ChildElems }) {
 
-  const [signingProvider, setSigningProvider] = useState<Web3Provider>()
+  const [signingProvider, setSigningProvider] = useState<Web3Provider | undefined>()
   const [network, setNetwork] = useState<string>()
-  const [account, setAccount] = useState<string>()
+  const [account, setAccount] = useState<string | undefined>()
   const [onboard, setOnboard] = useState<API>()
 
   const resetWallet = () => {

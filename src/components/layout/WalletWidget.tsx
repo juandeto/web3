@@ -1,10 +1,11 @@
 import FormattedAddress from 'components/shared/FormattedAddress'
+import 'styles/components/layout/layout.scss'
 
-export default function Wallet({ userAddress }: { userAddress: string }) {
+export default function Wallet({ userAddress }: { userAddress: string | undefined }) {
 
   return (
     <span
-      className="wallet__container"
+      className="walletWidget"
     >
       <FormattedAddress address={userAddress} />
     </span>

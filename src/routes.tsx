@@ -9,17 +9,17 @@ import { Switch,  Route, } from 'react-router-dom'
 
 
 const RoutesContainer: React.FunctionComponent = () => {
-    const { signerNetwork } = React.useContext(NetworkContext)
-    
+    const { userAddress } = React.useContext(NetworkContext)
+
     return (
     <div>
         <MainHeader />
         <Switch>
             <Route exact path="/" component={Home} />
             <ProtectedRoute 
-            isAuthenticated={signerNetwork ? true : false}
+            isAuthenticated={userAddress ? true : false}
             authenticationPath="/"
-            path="/transfer" 
+            path="/transfers" 
             component={Transfers} />
         </Switch>
     </div>

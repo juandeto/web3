@@ -1,28 +1,25 @@
 import { combineReducers, Action, Reducer } from 'redux'
 import { all, fork } from 'redux-saga/effects'
 import { connectRouter, RouterState } from 'connected-react-router'
-import { WalletState } from './userWallet/types'
+import { WalletBalances } from './userWallet/types'
 import { walletReducer } from './userWallet/reducer'
-import { LayoutState } from './layout/types'
-import { layoutReducer } from './layout/reducer'
+import BalancesSaga from './userWallet/sagas'
 import { History } from 'history'
 
 
 
 export interface ApplicationState {
-  layout: LayoutState
-  wallet: WalletState
+  wallet: WalletBalances
   router: RouterState
 }
 
 export const createRootReducer = (history: History) =>
   combineReducers({
-    layout: layoutReducer,
     wallet: walletReducer,
     router: connectRouter(history)
   })
 
 
-  // export function* rootSaga() {
-  //   yield all([fork(), fork()])
-  // }
+  export function* rootSaga() {
+    yield all([fork(BalancesSaga)])
+  }

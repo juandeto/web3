@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../styles/general.scss';
+import 'styles/components/shared/ul.scss';
 
 const Spinner = () => <div id="loading" className="loader">Loading...</div>
 

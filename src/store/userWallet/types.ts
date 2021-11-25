@@ -1,28 +1,32 @@
-import { API, Subscriptions, Wallet } from 'bnc-onboard/dist/src/interfaces'
+import { Web3Provider } from '@ethersproject/providers'
+
+export enum BalancesActionTypes {
+    GET_BALANCE = '@@userWallet/GET_BALANCE',
+    USDC_FETCH_SUCCESS = '@@userWallet/USDC_FETCH_BALANCE',
+    DAI_FETCH_SUCCESS = '@@userWallet/DAI_FETCH_BALANCE',
+    SET_ERROR_ON_FETCH_DAI = '@@userWallet/SET_ERROR_ON_FETCH_DAI',
+    SET_ERROR_ON_FETCH_USDC = '@@userWallet/SET_ERROR_ON_FETCH_USDC'
+}
 
 
-  export interface Ens {
-      name: string
-      avatar: string,
-      getText: () => void | null
-      contentash: string
-  }
+export interface PayloadBalance {
+    contractAddress: string
+    signingProvider?: Web3Provider
+    userAddress?: string
+    decimals: number
+}
 
-export enum WalletActionTypes {
-    SET_ADDRESS = '@@userWallet/SET_ADDRESS',
-    SET_NETWORK = '@@userWallet/SET_NETWORK',
-    SET_BALANCE = '@@userWallet/SET_BALANCE',
-    SET_WALLET = '@@userWallet/SET_WALLET',
-    SET_ENS = '@@userWallet/SET_ENS',
-    SET_ONBOARD = '@@userWallet/SET_ONBOARD'
-  }
+export interface ActionBalance {
+    error?: any
+    meta?: any
+    payload: PayloadBalance
+    type: BalancesActionTypes
+}
 
-export interface WalletState {
-    readonly address?: string
-    readonly ens?: Ens
-    readonly network?: number
-    readonly balance?: string
-    readonly wallet?: Wallet
-    readonly onboard?: API
+export interface WalletBalances {
+    readonly usdcBalance: string
+    readonly daiBalance: string
+    readonly errorOnFetchUsdc?: TypeError | string
+    readonly errorOnFetchDai?: TypeError | string
 }
   

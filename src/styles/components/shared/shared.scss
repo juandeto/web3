@@ -1,0 +1,51 @@
+@import '../../index.scss';
+
+
+.tooltip_container{
+    position: relative;
+    .tooltip {
+        position: absolute;
+        left: 80%;
+        bottom: 100%;
+        visibility: hidden;
+        background: rgba($primary, 1);
+        color: $background;
+        padding: 6px;
+        border-radius: 3px;
+       z-index: 3;
+    }
+}
+
+.tooltip_container:hover > .tooltip{
+    visibility: visible;
+}
+
+.tooltip:hover{
+    visibility: visible;
+}
+
+.formattedAddress_container {
+    display: inline-block;
+    margin: 16px 0;
+    background: rgba(0,0,0,0.3);
+    padding: 12px;
+    border-radius: 3px;
+    .formattedAddress {
+        color: $secondary;
+    }
+}
+
+.quiet  {
+    margin: 0 4px;
+    color: $secondary;
+    font-weight: bold;
+    padding: 4px 0;
+    display: flex;
+}
+
+@supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
+    .formattedAddress_container {
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+    }
+  }

@@ -1,0 +1,14 @@
+[
+    {
+      "name": "Dai Stablecoin",
+      "address": "0x0f95dE8451ef85db11204c296b687977B0F93D4E",
+      "symbol": "DAI",
+      "decimals": 18
+    },
+    {
+      "name": "Usdc",
+      "address": "0xef9f338eC0794cF111dfe5B33304a53aB280cc41",
+      "symbol": "USDC",
+      "decimals": 6
+    }
+  ]

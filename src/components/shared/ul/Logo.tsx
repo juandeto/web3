@@ -1,6 +1,6 @@
 import React, { FC } from 'react'; 
 import { BsWallet } from 'react-icons/bs'
-import 'styles/components/general.scss';
+import 'styles/components/shared/ul.scss';
 
 interface Props {
     [size:string]: string

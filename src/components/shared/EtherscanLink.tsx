@@ -16,7 +16,7 @@ export default function EtherscanLink({
       target="_blank"
       rel="noopener noreferrer"
     >
-      <FaLink />
+       Check on scan! {'  '}<FaLink />
     </a>
   )
 }

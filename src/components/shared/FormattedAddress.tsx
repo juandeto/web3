@@ -1,8 +1,8 @@
 import { readProvider } from 'utils/readProvider'
 import { utils } from 'ethers'
 import { useEffect, useState } from 'react'
-
 import EtherscanLink from 'components/shared/EtherscanLink'
+import 'styles/components/shared/shared.scss'
 
 type EnsRecord = {
   name: string | null
@@ -88,12 +88,14 @@ export default function FormattedAddress({
       : '')
 
   return (
-    <div> 
-        <span>
+    <span className="formattedAddress_container tooltip_container"> 
+        <span className="tooltip">
           <span style={{ userSelect: 'all' }}>{address}</span>{' '}
-          <EtherscanLink value={address} type="address" />
+         <EtherscanLink value={address} type="address" />
         </span>
-      <span style={{ cursor: 'default', userSelect: 'all' }}>{formatted}</span>
-    </div>
+      <span 
+      className="formattedAddress"
+      style={{ cursor: 'default', userSelect: 'all' }}>{formatted}</span>
+    </span>
   )
 }

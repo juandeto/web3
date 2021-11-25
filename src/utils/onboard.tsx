@@ -1,10 +1,10 @@
 import Onboard from 'bnc-onboard'
 import { Subscriptions } from 'bnc-onboard/dist/src/interfaces'
 
-const infuraId = process.env.REACT_APP_INFURA_ID
+const INFURA_ID = process.env.REACT_APP_INFURA_ID
 const appName = 'Wonderland'
 const networkId = 4 //by default
-const rpcUrl = `https://rinkeby.infura.io/v3/${infuraId}`
+const rpcUrl = `https://rinkeby.infura.io/v3/${INFURA_ID}`
 const dappId = process.env.REACT_APP_BLOCKNATIVE_API_KEY
 
 // TODO(odd-amphora): Add support for Formatic, Portis, etc. if requested.

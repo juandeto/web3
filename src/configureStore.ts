@@ -3,7 +3,7 @@ import createSagaMiddleware from 'redux-saga'
 import { routerMiddleware } from 'connected-react-router'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { History } from 'history'
-import { ApplicationState, createRootReducer } from './store'
+import { ApplicationState, createRootReducer, rootSaga } from './store'
 
 export default function configureStore(history: History, initialState: ApplicationState): Store<ApplicationState> {
     const composeEnhancers = composeWithDevTools({})
@@ -12,6 +12,6 @@ export default function configureStore(history: History, initialState: Applicati
 
     const store = createStore(createRootReducer(history), initialState, enhacer)
     
-    // sagaMiddleware.run(rootSaga)
+    sagaMiddleware.run(rootSaga)
     return store
 }

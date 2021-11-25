@@ -1,10 +1,9 @@
 import { action } from 'typesafe-actions'
-import { Ens, WalletActionTypes } from './types'
-import { Wallet } from 'bnc-onboard/dist/src/interfaces'
+import { BalancesActionTypes, PayloadBalance } from './types'
 
 
-export const setAddress = (address: string) => action(WalletActionTypes.SET_ADDRESS, address)
-export const setWallet = (wallet: Wallet) => action(WalletActionTypes.SET_WALLET, wallet)
-export const setEns = (ens: Ens) => action(WalletActionTypes.SET_ENS, ens)
-export const setBalance = (balance: string) => action(WalletActionTypes.SET_BALANCE, balance)
-export const setNetwork = (network: number) => action(WalletActionTypes.SET_NETWORK, network)
+export const getBalance = (data: PayloadBalance) => action(BalancesActionTypes.GET_BALANCE, data)
+export const setUsdcBalance = (usdcBalance: string) => action(BalancesActionTypes.USDC_FETCH_SUCCESS, usdcBalance)
+export const setDaiBalance = (daiBalance: string) => action(BalancesActionTypes.DAI_FETCH_SUCCESS, daiBalance)
+export const setUsdcErrorOnFetchBalance= (error: TypeError | string) => action(BalancesActionTypes.SET_ERROR_ON_FETCH_USDC, error)
+export const setDaiErrorOnFetchBalance= (error: TypeError | string) => action(BalancesActionTypes.SET_ERROR_ON_FETCH_DAI, error)

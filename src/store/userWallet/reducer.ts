@@ -1,32 +1,30 @@
 import { Reducer } from 'redux'
-import { WalletState, WalletActionTypes } from './types'
 
-export const initialState: WalletState =  {
-    address: undefined,
-    ens: undefined,
-    network: 4, //rinkeby network set by default
-    balance: undefined,
-    wallet: undefined
+import { WalletBalances, BalancesActionTypes } from './types'
+
+export const initialState: WalletBalances =  {
+    usdcBalance: "0",
+    daiBalance: "0",
+    errorOnFetchUsdc: undefined,
+    errorOnFetchDai: undefined
 }
 
 
-const reducer: Reducer<WalletState> = (state = initialState, action) => {
+const reducer: Reducer<WalletBalances> = (state = initialState, action) => {
     switch (action.type) {
-      case WalletActionTypes.SET_ADDRESS:{
-        return { ...state, address: action.payload }
+      case BalancesActionTypes.USDC_FETCH_SUCCESS:{
+        return { ...state, usdcBalance: action.payload }
       }
-      case WalletActionTypes.SET_BALANCE: {
-        return { ...state, balance: action.payload }
+      case BalancesActionTypes.DAI_FETCH_SUCCESS: {
+        return { ...state, daiBalance: action.payload }
       }
-      case WalletActionTypes.SET_ENS: {
-        return { ...state, ens: action.payload }
+      case BalancesActionTypes.SET_ERROR_ON_FETCH_DAI: {
+        return { ...state, errorOnFetchDai: action.payload }
       }
-      case WalletActionTypes.SET_NETWORK: {
-        return { ...state, network: action.payload }
+      case BalancesActionTypes.SET_ERROR_ON_FETCH_USDC: {
+        return { ...state, errorOnFetchUsdc: action.payload }
       }
-      case WalletActionTypes.SET_WALLET: {
-        return { ...state, wallet: action.payload }
-      }
+      
       default: {
         return state
       }

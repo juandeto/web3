@@ -33,3 +33,30 @@
         width: 85%;
     }
   }
+
+
+
+
+
+.balances_container {
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    margin: 16px auto;
+    .balances_wrapper{
+        display: flex;
+        align-items: center;
+        margin: 0 8px;
+        h3{
+            font-size: $big-font;
+            color: $text;
+            padding: 4px;
+        }
+        p{
+
+            font-size: $medium-font;
+            text-align: center;
+            color: $primary;
+        }
+    }
+}

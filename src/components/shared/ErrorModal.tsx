@@ -4,7 +4,7 @@ import 'styles/components/shared/ul.scss'
 
 interface  ModalProps {
     show: boolean,
-    msg: string,
+    msg?: string,
     type: any
     onAfter: () => void,
     close: () => void

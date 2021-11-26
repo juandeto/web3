@@ -56,12 +56,16 @@ const TargetWallet: React.FC<AllProps> = (props) => {
         if(!value){
             return "The current target can not be empty"
         } else if(!regEx.test(value)){
-            return "The current target wallet doesn't has a correct format"
+            return "The current target wallet doesn't has the correct format"
         } else {
             return ""
         }
     }
 
+    const handleClear = () => {
+        setInputValue({value: "", error: false})
+        setTargetWallet("")
+    }
 
 
       return <>
@@ -69,18 +73,20 @@ const TargetWallet: React.FC<AllProps> = (props) => {
                     <label className="walletTarget_label">Set target wallet</label>
                     <div className="walletTarget_actions">
                         <div className="walletTarget_value">
+
                         {targetWallet ? 
                         <p>{targetWallet}</p> :
                         <input 
-                        placeholder="example: 0x63639D1C5C3B89B0601D22692d1580844944e366"
-                        value={inputValue.value} 
-                        type="text" 
-                        name="targetWallet" 
-                        onChange={( e )=> handleChange(e.target.value)} 
-                        onBlur={handleBlur}/> }
+                            placeholder="Example: 0x63639D1C5C3B89B0601D22692d1580844944e366"
+                            value={inputValue.value} 
+                            type="text" 
+                            name="targetWallet" 
+                            onChange={( e )=> handleChange(e.target.value)} 
+                            onBlur={handleBlur}/> }
                         </div>
-                       <Button label="Set" disabled={inputValue.error || inputValue.value === ""} type="secondary" cta={() => setTargetWallet(inputValue.value)}/>
-                       <Button label="Clear" type="primary" cta={() => setInputValue({value: "", error: false})}/>
+
+                       {!targetWallet && <Button label="Set" disabled={inputValue.error || inputValue.value === ""} type="secondary" cta={() => setTargetWallet(inputValue.value)}/>}
+                       <Button label="Clear" type="primary" cta={handleClear}/>
                     </div>
                     {showError && <p className="walletTarget_invalid">{validateAddress(inputValue.value)}</p>}
                 </div>

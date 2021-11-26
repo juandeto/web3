@@ -13,6 +13,9 @@ export const initialState: Transfer =  {
 
 const reducer: Reducer<Transfer> = (state = initialState, action) => {
     switch (action.type) {
+      case TransferActionTypes.SET_TARGET_WALLET_TRANSFER:{
+        return { ...state, targetWallet: action.payload }
+      }
       case TransferActionTypes.SET_TRANSFER_SEND:{
         return { ...state, loadingTransfer: true }
       }

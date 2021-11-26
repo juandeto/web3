@@ -38,34 +38,19 @@
 
 
 
-.balances_container {
+.cards_container {
     display: flex;
-    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
     padding: 8px;
     margin: 16px auto;
-    .balances_wrapper{
-        display: flex;
-        align-items: center;
-        margin: 0 8px;
-        h3{
-            font-size: $big-font;
-            color: $text;
-            padding: 4px;
-        }
-        p{
-
-            font-size: $medium-font;
-            text-align: center;
-            color: $primary;
-        }
-    }
 }
 
 
 
 .walletTarget_container{
     padding: 4px;
-    width: 100%;
+    width: 80%;
     .walletTarget_label{
         text-align: left;
         font-size: $medium-font;
@@ -75,10 +60,14 @@
         display: flex;
         justify-content: start;
         align-items: center;
-        width: 90%;
+        width: 100%;
         padding: 8px 0;
         .walletTarget_value {
             width: 85%;
+        }
+        p{
+            color: $primary;
+            font-size: $medium-font;
         }
         button {
             margin: 0 8px;
@@ -87,5 +76,61 @@
     .walletTarget_invalid{
         color: $primary;
         font-weight: bold;
+    }
+}
+
+
+.balances_wrapper{
+    display: flex;
+    align-items: center;
+    margin: 0 8px;
+    h3{
+        font-size: $medium-font;
+        color: $text;
+        padding: 4px;
+    }
+    p{
+
+        font-size: $medium-font;
+        text-align: center;
+        color: $primary;
+    }
+}
+
+.transferCard_content{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    padding: 12px 8px;
+}
+
+.tranferCard_container{
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .tranferCard_inputContainer{
+        margin: 16px 0;
+    }
+    .tranferCard_label {
+        font-size: $medium-font;
+        font-weight: bold;
+        color: $text;
+    }
+    .tranferCard_button{
+        display: flex;
+        justify-content: space-between;
+        button {
+            width: 45%;
+        }
+    }
+
+    .tranferCard_error{
+        color: $secondary;
+        font-weight: bold;
+        font-size: $medium-font;
+        width: 400px;
+        text-align: center;
     }
 }

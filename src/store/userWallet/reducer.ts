@@ -5,12 +5,16 @@ import { WalletBalances, BalancesActionTypes } from './types'
 export const initialState: WalletBalances =  {
     tokens: [
       {
-        name: 'USDC',
+        name: 'Usdc',
         balance: '0',
+        address: process.env.REACT_APP_USDCD_ADDRESS as string,
+        decimals: 6
       },
       {
-        name: 'DAI',
+        name: 'Dai',
         balance: '0',
+        address: process.env.REACT_APP_DAI_ADDRESS as string,
+        decimals: 18
       }
     ],
     errorOnFetch:{

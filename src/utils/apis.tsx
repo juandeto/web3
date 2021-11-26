@@ -6,12 +6,13 @@ import * as ethers from 'ethers'
 export async function getBalance( payload: PayloadBalance) {
   const {
     contract,
-    userAddress
+    userAddress,
+    token
   } = payload
   
     try {
       const balance = await contract?.balanceOf(userAddress);
-      const formatBalance = await ethers.utils.formatUnits(balance, 6)
+      const formatBalance = await ethers.utils.formatUnits(balance, token.decimals)
 
       return {
         data: formatBalance,
@@ -34,13 +35,12 @@ export async function approveToken(payload: ITransaction) {
     const {
       contract,
       targetWallet,
-      amount
+      amount,
+      token
     } = payload
 
   try {
-      const contractName = await contract.name()
-      const decimals = await contractName === "Dai" ? 18 : 6
-      const numberOfTokens = ethers.utils.parseUnits(amount, decimals)
+      const numberOfTokens = ethers.utils.parseUnits(amount, token.decimals)
       const approval = await contract.approve(targetWallet, numberOfTokens)
       return {
         data: approval,
@@ -62,13 +62,12 @@ export async function transferFrom(payload: ITransaction) {
   const {
     contract,
     targetWallet,
-    amount
+    amount,
+    token
   } = payload
     
   try {
-      const contractName = await contract.name()
-      const decimals = await contractName === "Dai" ? 18 : 6
-      const numberOfTokens = ethers.utils.parseUnits(amount, decimals)
+      const numberOfTokens = ethers.utils.parseUnits(amount, token.decimals)
       const approval = await contract.transferFrom(targetWallet, numberOfTokens)
       return {
         data: approval,

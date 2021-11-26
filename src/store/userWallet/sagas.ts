@@ -14,7 +14,7 @@ type ResponseFetchBalance = {
 }
 
 function* useBalance(action: ActionBalance) {
-  const { tokenName } = action.payload
+  const { token } = action.payload
   const state: ApplicationState = yield select(state => state);
   try {
     // To call async functions, use redux-saga's `call()`.
@@ -24,14 +24,14 @@ function* useBalance(action: ActionBalance) {
 
       yield put(setErrorOnFetchBalance({
         error: res.error,
-        tokenName: tokenName
+        tokenName: token.name
       }))
 
     }else {
 
       const cloneTokens = [ ...state.wallet.tokens ]
       const updatedTokens = cloneTokens.map((t:TokenBalance) => {
-        if(t.name === tokenName){
+        if(t.address === token.address){
             t.balance = res.data
         }
         return t
@@ -45,7 +45,7 @@ function* useBalance(action: ActionBalance) {
 
       yield(setErrorOnFetchBalance({
         error: err,
-        tokenName: tokenName
+        tokenName: token.name
       }))
 
 }

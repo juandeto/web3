@@ -1,22 +1,20 @@
 import {useEffect, useContext, useState} from 'react'
 import { NetworkContext } from 'config/networkContext'
 import { connect } from 'react-redux'
-import { Tokens, TokenBalance, ErrorOnFetch } from 'store/userWallet/types'
+import { TokenBalance, ErrorOnFetch } from 'store/userWallet/types'
 import { getBalance as getBalanceAction, setErrorOnFetchBalance} from 'store/userWallet/actions'
 import { ApplicationState } from 'store'
-import FormattedBalance from 'components/shared/FormattedBalance'
 import ErrorModal from 'components/shared/ErrorModal'
-import { useContract } from 'config/ContractHook'
 import { PayloadBalance } from 'store/userWallet/types'
 import { Contract } from '@ethersproject/contracts'
+import TransferCard from 'components/layout/TransferCard'
+import erc20abi from 'assets/erc20.json'
 import 'styles/components/layout/layout.scss'
 
 
-const usdcAddress: string = process.env.REACT_APP_USDCD_ADDRESS as string
-const daiAddress: string = process.env.REACT_APP_DAI_ADDRESS as string
 
 interface PropsFromState {
-    tokens?: TokenBalance[]
+    tokens: TokenBalance[]
     errorOnFetch?: ErrorOnFetch
 }
 
@@ -34,10 +32,8 @@ type ModalState ={
 type AllProps = PropsFromState & PropsFromDispatch
 
 
-const Balances: React.FC<AllProps> = (props) => {
+const TransferCards: React.FC<AllProps> = (props) => {
     const [showModal, setShowModal] = useState<ModalState>({show: false, type: null, msg: ""})
-    const contractUsdc = useContract(usdcAddress)
-    const contractDai = useContract(daiAddress)
 
     const {
         signingProvider,
@@ -50,15 +46,6 @@ const Balances: React.FC<AllProps> = (props) => {
       getBalance
     } = props
     
-
-    const getCoinBalance = (contract: Contract | undefined, name: Tokens) => {
-      const data: PayloadBalance = {
-       contract: contract,
-       userAddress: userAddress,
-       tokenName: name
-     }
-     getBalance(data)
-   }
 
 
    const resetError = () => {
@@ -77,9 +64,24 @@ const Balances: React.FC<AllProps> = (props) => {
       })
    }
 
+
+  
+
   useEffect(() => {
-      getCoinBalance(contractUsdc, "USDC")
-      getCoinBalance(contractDai, "DAI")
+    const getBalances = () =>{
+      for (let i = 0; i < tokens.length; i++) {
+  
+        const data: PayloadBalance = {
+          contract:  new Contract(tokens[i].address, erc20abi, signingProvider),
+          userAddress: userAddress,
+          token: tokens[i]
+        }
+  
+        getBalance(data)
+      }
+    }
+    
+    getBalances()
     }, [signingProvider, userAddress])
 
 
@@ -99,10 +101,9 @@ const Balances: React.FC<AllProps> = (props) => {
 
 
       return <>
-                <div className="balances_container">
-                  <h3>Your account balances:</h3>
+                <div className="cards_container">
                   {
-                  tokens?.map((token: TokenBalance )=> <FormattedBalance token={token}/>)
+                  tokens?.map((token: TokenBalance )=> <TransferCard token={token}/>)
                   }
                 </div>
                 <ErrorModal 
@@ -131,4 +132,4 @@ const mapDispatchToProps: PropsFromDispatch = {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-  )(Balances);
+  )(TransferCards);

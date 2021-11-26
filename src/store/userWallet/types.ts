@@ -8,7 +8,7 @@ export enum BalancesActionTypes {
 }
 
 
-export type Tokens = "USDC" | "DAI" | undefined
+export type Tokens = "Usdc" | "Dai" | undefined
 
 
 export interface ActionBalance {
@@ -22,13 +22,15 @@ export interface ActionBalance {
 export interface PayloadBalance {
     contract?: Contract
     userAddress?: string
-    tokenName: Tokens
+    token: TokenBalance
 }
 
 
 export interface TokenBalance {
     name: Tokens
     balance: string
+    address: string,
+    decimals: number
 }
 
 

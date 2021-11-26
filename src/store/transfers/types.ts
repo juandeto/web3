@@ -1,4 +1,5 @@
 import { Contract } from "ethers";
+import { TokenBalance } from 'store/userWallet/types'
 
 export enum TransferActionTypes {
     SET_TARGET_WALLET_TRANSFER= '@@userTransfers/SET_TARGET_WALLET_TRANSFER',
@@ -24,6 +25,7 @@ export interface ITransaction {
     amount: string
     contract: Contract
     targetWallet: string
+    token: TokenBalance
 }
 
 

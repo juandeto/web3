@@ -25,6 +25,6 @@ export const createRootReducer = (history: History) =>
   })
 
 
-  export function* rootSaga() {
-    yield all([fork(BalancesSaga), fork(transfersSaga)])
-  }
+export function* rootSaga() {
+  yield all([fork(BalancesSaga), fork(transfersSaga)])
+}

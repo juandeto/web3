@@ -58,7 +58,7 @@
     }
     .walletTarget_actions{
         display: flex;
-        justify-content: start;
+        justify-content: flex-start;
         align-items: center;
         width: 100%;
         padding: 8px 0;
@@ -117,6 +117,11 @@
         font-size: $medium-font;
         font-weight: bold;
         color: $text;
+        span {
+            font-weight: normal;
+            font-size: $normal-font;
+            color: $background;
+        }
     }
     .tranferCard_button{
         display: flex;

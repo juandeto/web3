@@ -1,4 +1,4 @@
-import { combineReducers, Action, Reducer } from 'redux'
+import { combineReducers } from 'redux'
 import { all, fork } from 'redux-saga/effects'
 import { connectRouter, RouterState } from 'connected-react-router'
 import { WalletBalances } from './userWallet/types'

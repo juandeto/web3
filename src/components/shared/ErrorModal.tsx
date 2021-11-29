@@ -12,7 +12,6 @@ interface  ModalProps {
 
 const ErrorModal: React.FC<ModalProps> = ({show, msg, onAfter, type, close }) => {
     ReactModal.setAppElement('body');
-    console.log("type: ", type)
     return (
         <ReactModal 
         isOpen={show}

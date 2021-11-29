@@ -1,4 +1,5 @@
 import { Contract } from "ethers";
+import { Web3Provider } from '@ethersproject/providers'
 import { TokenBalance } from 'store/userWallet/types'
 
 export enum TransferActionTypes {
@@ -9,7 +10,7 @@ export enum TransferActionTypes {
     SET_TRANSFER_SEND = '@@userTransfers/SET_TRANSFER_SEND',
     SET_TRANSFER_SUCCESS = '@@userTransfers/SET_TRANSFER_SUCCESS',
     SET_TRANSFER_FAIL = '@@userTransfers/SET_TRANSFER_FAIL'
-  }
+}
 
 
 export interface ActionTransfer {
@@ -20,22 +21,29 @@ export interface ActionTransfer {
 }
 
 
-
 export interface ITransaction {
     amount: string
     contract: Contract
     targetWallet: string
-    token: TokenBalance
+    token: TokenBalance,
+    userAddress?: string
+    signingProvider?: Web3Provider
 }
 
 
+export interface IApproved {
+    name?: string
+    approved: boolean
+    amountApproved: string
+} 
 
 
 export interface Transfer {
     readonly targetWallet: string
     readonly loadingTransfer: boolean
     readonly loadingApprove: boolean
-    readonly errorApprove: any
     readonly errorTransfer: any
+    readonly errorApprove: any
+    readonly approved: IApproved[]
 }
 

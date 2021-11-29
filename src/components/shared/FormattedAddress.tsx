@@ -1,6 +1,6 @@
 import { readProvider } from 'utils/readProvider'
 import { utils } from 'ethers'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import EtherscanLink from 'components/shared/EtherscanLink'
 import 'styles/components/shared/shared.scss'
 
@@ -20,7 +20,7 @@ export default function FormattedAddress({
   const now = new Date().valueOf()
   const getStorageKey = () => 'jb_ensDict_' + readProvider
 
-  const getEnsDict = () => {
+  const getEnsDict = useCallback(() => {
     try {
       return JSON.parse(
         window.localStorage.getItem(getStorageKey()) ?? '{}',
@@ -29,7 +29,7 @@ export default function FormattedAddress({
       console.info('ENS storage not found')
       return {}
     }
-  }
+  },[])
 
 
 
@@ -67,7 +67,7 @@ export default function FormattedAddress({
       window.localStorage?.setItem(
         getStorageKey(),
         JSON.stringify({
-          ...getEnsDict(),
+          ...getEnsDict,
           [address]: newRecord,
         }),
       )
@@ -76,7 +76,7 @@ export default function FormattedAddress({
     }
 
     tryUpdateENSDict()
-  }, [address])
+  }, [address, now, getEnsDict])
 
   if (!address) return null
 

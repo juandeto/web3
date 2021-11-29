@@ -43,5 +43,6 @@ export interface ErrorOnFetch {
 export interface WalletBalances {
     readonly tokens: TokenBalance[]
     readonly errorOnFetch: ErrorOnFetch
+    readonly isLoadingFetchBalance: boolean
 }
   

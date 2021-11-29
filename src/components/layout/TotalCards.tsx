@@ -1,8 +1,9 @@
-import {useEffect, useContext, useState} from 'react'
+import {useEffect, useContext, useState, useMemo} from 'react'
 import { NetworkContext } from 'config/networkContext'
 import { connect } from 'react-redux'
 import { TokenBalance, ErrorOnFetch } from 'store/userWallet/types'
-import { getBalance as getBalanceAction, setErrorOnFetchBalance} from 'store/userWallet/actions'
+import { setTransferFail } from 'store/transfers/actions'
+import { getBalance as getBalanceAction, setErrorOnFetchBalance, } from 'store/userWallet/actions'
 import { ApplicationState } from 'store'
 import ErrorModal from 'components/shared/ErrorModal'
 import { PayloadBalance } from 'store/userWallet/types'
@@ -14,13 +15,15 @@ import 'styles/components/layout/layout.scss'
 
 
 interface PropsFromState {
-    tokens: TokenBalance[]
-    errorOnFetch?: ErrorOnFetch
+    tokens: TokenBalance[],
+    errorOnFetch?: ErrorOnFetch,
+    errorTransfer: any
 }
 
 interface PropsFromDispatch {
     getBalance: typeof getBalanceAction
     setErrorOnFetchBalance: typeof setErrorOnFetchBalance
+    setTransferFail: typeof setTransferFail
 }
 
 type ModalState ={
@@ -34,7 +37,6 @@ type AllProps = PropsFromState & PropsFromDispatch
 
 const TransferCards: React.FC<AllProps> = (props) => {
     const [showModal, setShowModal] = useState<ModalState>({show: false, type: null, msg: ""})
-
     const {
         signingProvider,
         userAddress
@@ -43,17 +45,19 @@ const TransferCards: React.FC<AllProps> = (props) => {
     const {
       tokens, 
       errorOnFetch,
-      getBalance
+      getBalance,
+      setTransferFail,
+      errorTransfer
     } = props
-    
+
 
 
    const resetError = () => {
-     console.log('resetea el error')
     setErrorOnFetchBalance({
       error: null,
       tokenName: undefined
     })
+    setTransferFail(null)
    }
 
    const closeModal = () => {
@@ -98,12 +102,22 @@ const TransferCards: React.FC<AllProps> = (props) => {
       }
     },[errorOnFetch])
 
-
+    useEffect(() => {
+      if(errorTransfer !== null){
+        setShowModal({
+          show: true,
+          type: errorTransfer?.code,
+          msg: `${errorTransfer?.reason || "" }`
+        })
+      } else {
+        closeModal()
+      }
+    },[errorTransfer])
 
       return <>
                 <div className="cards_container">
                   {
-                  tokens?.map((token: TokenBalance )=> <TransferCard token={token}/>)
+                  tokens?.map((token: TokenBalance )=> <TransferCard key={token.address} token={token}/>)
                   }
                 </div>
                 <ErrorModal 
@@ -118,15 +132,17 @@ const TransferCards: React.FC<AllProps> = (props) => {
 
 
 
-const mapStateToProps = ({ wallet }: ApplicationState) => ({
+const mapStateToProps = ({ wallet, transfers }: ApplicationState) => ({
     tokens: wallet.tokens,
     errorOnFetc: wallet.errorOnFetch,
+    errorTransfer: transfers.errorTransfer
   })
   
 
 const mapDispatchToProps: PropsFromDispatch = {
     getBalance:  getBalanceAction,
-    setErrorOnFetchBalance: setErrorOnFetchBalance
+    setErrorOnFetchBalance: setErrorOnFetchBalance,
+    setTransferFail: setTransferFail
 }
 
 export default connect(

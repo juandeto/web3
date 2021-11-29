@@ -1,17 +1,15 @@
 import * as React from 'react'
 import { NetworkContext } from 'config/networkContext'
-import { RouteComponentProps } from 'react-router-dom'
-import TransferCards from 'components/layout/TransferCards'
 import WalletWidget from 'components/layout/WalletWidget'
 import TargetWallet from 'components/layout/TargetWallet'
 import 'styles/components/views/transfers.scss'
+import TotalCards from 'components/layout/TotalCards'
 
 
 
-type AllProps = RouteComponentProps
 
 
-const Transfers: React.FC<AllProps> = props => {
+const Transfers: React.FC = ( ) => {
   
   const { userAddress } = React.useContext(NetworkContext)
 
@@ -24,7 +22,7 @@ const Transfers: React.FC<AllProps> = props => {
           <TargetWallet />
         </div>
         <section className="transfers__wrapper">
-          <TransferCards />
+          <TotalCards />
         </section>
       </div>
     </>

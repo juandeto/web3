@@ -3,47 +3,51 @@ import { ITransaction } from 'store/transfers/types'
 import * as ethers from 'ethers'
 
 
-export async function getBalance( payload: PayloadBalance) {
-  const {
-    contract,
-    userAddress,
-    token
-  } = payload
+// export async function getBalance( payload: PayloadBalance) {
+//   const {
+//     contract,
+//     userAddress,
+//     token
+//   } = payload
   
-    try {
-      const balance = await contract?.balanceOf(userAddress);
-      const formatBalance = await ethers.utils.formatUnits(balance, token.decimals)
+//     try {
+//       console.log("payload: ", payload)
 
-      return {
-        data: formatBalance,
-        error: null
-      }
+//       return  contract?.balanceOf()
 
-    } catch (error) {
-      console.log(error)
+//     } catch (error) {
+//       console.log(error)
 
-      return {
-        data: "",
-        error: error
-      }
-    }
-  }
+//       return {
+//         data: "",
+//         error: error
+//       }
+//     }
+//   }
 
 
 
 export async function approveToken(payload: ITransaction) {
     const {
       contract,
-      targetWallet,
       amount,
-      token
+      token,
+      userAddress,
+      signingProvider,
+      targetWallet
     } = payload
-
   try {
-      const numberOfTokens = ethers.utils.parseUnits(amount, token.decimals)
-      const approval = await contract.approve(targetWallet, numberOfTokens)
+    const decimals = token.decimals.toString()
+      const numberOfTokens = ethers.utils.parseUnits(amount, decimals)
+      const signer:any = signingProvider?.getSigner(userAddress)
+      const connected = contract.connect(signer)
+
+      const approval = await connected.approve(targetWallet, numberOfTokens)
+      await approval.wait()
+     const allowance = await connected.allowance(userAddress, targetWallet)
+      
       return {
-        data: approval,
+        data: allowance,
         error: null
       }
   } catch (error) {
@@ -63,12 +67,20 @@ export async function transferFrom(payload: ITransaction) {
     contract,
     targetWallet,
     amount,
-    token
+    userAddress,
+    token,
+    signingProvider
   } = payload
-    
+
   try {
-      const numberOfTokens = ethers.utils.parseUnits(amount, token.decimals)
-      const approval = await contract.transferFrom(targetWallet, numberOfTokens)
+    const decimals = token.decimals.toString()
+      const numberOfTokens = ethers.utils.parseUnits(amount, decimals)
+      const signer:any = signingProvider?.getSigner(userAddress)
+      const connected = contract.connect(signer)
+      console.log('connected: ', connected, numberOfTokens, targetWallet)
+      const approval = await connected.transferFrom(userAddress, targetWallet, numberOfTokens)
+      await approval.wait()
+      console.log('approvall: ', approval)
       return {
         data: approval,
         error: null

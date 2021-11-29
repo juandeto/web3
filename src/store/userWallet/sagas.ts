@@ -1,38 +1,31 @@
 import { all, call, fork, put, takeEvery, select } from 'redux-saga/effects'
-import { BalancesActionTypes, ActionBalance, WalletBalances, TokenBalance } from './types'
+import { BalancesActionTypes, ActionBalance, TokenBalance } from './types'
 import {  setBalance, setErrorOnFetchBalance } from './actions'
-import * as api from '../../utils/apis'
+import * as ethers from 'ethers'
 import { ApplicationState } from 'store'
 
 
-const usdcAddress: string = process.env.REACT_APP_USDCD_ADDRESS as string
-const daiAddress: string = process.env.REACT_APP_DAI_ADDRESS as string
-
-type ResponseFetchBalance = {
-  error: any,
-  data: string
-}
+type ResponseFetchBalance = Error | ethers.BigNumberish
 
 function* useBalance(action: ActionBalance) {
   const { token } = action.payload
   const state: ApplicationState = yield select(state => state);
   try {
-    // To call async functions, use redux-saga's `call()`.
-    const  res: ResponseFetchBalance = yield call(api.getBalance, action.payload)
 
-    if(res.error instanceof Error){
+    const  res: ResponseFetchBalance = yield call(action.payload.contract?.balanceOf, action.payload.userAddress)
+    if(res instanceof Error){
 
       yield put(setErrorOnFetchBalance({
-        error: res.error,
+        error: res,
         tokenName: token.name
       }))
 
     }else {
-
       const cloneTokens = [ ...state.wallet.tokens ]
       const updatedTokens = cloneTokens.map((t:TokenBalance) => {
         if(t.address === token.address){
-            t.balance = res.data
+          const formatBalance = ethers.utils.formatUnits(res, token.decimals)
+            t.balance = formatBalance
         }
         return t
       })

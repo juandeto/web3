@@ -1,6 +1,6 @@
 import { Web3Provider } from '@ethersproject/providers'
 import { NetworkContext } from 'config/networkContext'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { initOnboard } from 'utils/onboard'
 import { API, Subscriptions, Wallet } from 'bnc-onboard/dist/src/interfaces'
 
@@ -14,11 +14,11 @@ export default function Network({ children }: { children: ChildElems }) {
   const [account, setAccount] = useState<string | undefined>()
   const [onboard, setOnboard] = useState<API>()
 
-  const resetWallet = () => {
+  const resetWallet = useCallback(() => {
     onboard?.walletReset()
     setSigningProvider(undefined)
     window.localStorage.setItem(KEY_SELECTED_WALLET, '')
-  }
+  }, [onboard])
 
   const selectWallet = async () => {
     resetWallet()
@@ -81,7 +81,7 @@ export default function Network({ children }: { children: ChildElems }) {
     }
   }
 
-  useEffect(initializeWallet, [])
+  useEffect(initializeWallet, [resetWallet, onboard])
   useEffect(refreshNetwork, [signingProvider, network])
   useEffect(reconnectWallet, [onboard])
 

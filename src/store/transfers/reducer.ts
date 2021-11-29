@@ -6,10 +6,10 @@ export const initialState: Transfer =  {
     targetWallet: "",
     loadingTransfer: false,
     loadingApprove: false,
-    errorApprove: null,
     errorTransfer: null,
+    errorApprove: null,
+    approved: []
 }
-
 
 const reducer: Reducer<Transfer> = (state = initialState, action) => {
     switch (action.type) {
@@ -26,15 +26,14 @@ const reducer: Reducer<Transfer> = (state = initialState, action) => {
         return { ...state, loadingTransfer: false, errorTransfer: action.payload }
       }
       case TransferActionTypes.SET_APPROVE_SEND:{
-        return { ...state, loadingTransfer: true }
+        return { ...state, loadingApprove: true }
       }
       case TransferActionTypes.SET_APPROVE_SUCCESS: {
-        return { ...state, loadingApprove: false }
+        return { ...state, loadingApprove: false,  approved: action.payload}
       }
       case TransferActionTypes.SET_APPROVE_FAIL: {
-        return { ...state, loadingApprove: false, errorApprove: action.payload }
+        return { ...state, loadingApprove: false,  errorApprove: action.payload}
       }
-      
       default: {
         return state
       }

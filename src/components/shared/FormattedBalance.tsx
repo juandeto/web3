@@ -6,7 +6,6 @@ type IProps = {
 }
 
 const FormattedBalance:React.FC<IProps> = ({token})=> {
-
   const parseBalance = (str:string | undefined) => parseInt(str || "").toFixed(2)
 
   return (

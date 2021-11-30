@@ -1,7 +1,5 @@
 import { ITransaction } from 'store/transfers/types'
 import * as ethers from 'ethers'
-import DelegateWallet from 'components/layout/DelegateWallet'
-
 
 export async function approveToken(payload: ITransaction) {
     const {
@@ -10,7 +8,7 @@ export async function approveToken(payload: ITransaction) {
       token,
       userAddress,
       signingProvider,
-      targetWallet
+      delegateWallet
     } = payload
   try {
     const decimals = token.decimals.toString()
@@ -18,7 +16,7 @@ export async function approveToken(payload: ITransaction) {
       const signer:any = signingProvider?.getSigner(userAddress)
       const connected = contract.connect(signer)
 
-      const approval = await connected.approve(targetWallet, numberOfTokens)
+      const approval = await connected.approve(delegateWallet, numberOfTokens)
       await approval.wait()
 
       return {

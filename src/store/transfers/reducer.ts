@@ -40,6 +40,9 @@ const reducer: Reducer<Transfer> = (state = initialState, action) => {
         return { ...state, loadingApprove: false,  errorApprove: action.payload}
       }
       case TransferActionTypes.SET_ALLOWANCE_SUCCESS:{
+        return { ...state, allowances: [ ...state.allowances, action.payload]}
+      }
+      case TransferActionTypes.SET_ALLOWANCE_SUCCESS_NEW:{
         return { ...state, allowances: action.payload}
       }
       case TransferActionTypes.SET_ALLOWANCE_FAIL:{

@@ -13,6 +13,7 @@ export enum TransferActionTypes {
     SET_TRANSFER_FAIL = '@@userTransfers/SET_TRANSFER_FAIL',
     GET_ALLOWANCE = '@@userTransfers/GET_ALLOWANCE',
     SET_ALLOWANCE_SUCCESS = '@@userTransfers/SET_ALLOWANCE_SUCCESS',
+    SET_ALLOWANCE_SUCCESS_NEW = '@@userTransfers/SET_ALLOWANCE_SUCCESS_NEW',
     SET_ALLOWANCE_FAIL = '@@userTransfers/SET_ALLOWANCE_FAIL'
 }
 

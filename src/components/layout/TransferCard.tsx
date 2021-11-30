@@ -5,7 +5,7 @@ import { TokenBalance } from 'store/userWallet/types'
 import { IApproved,IAllowance } from 'store/transfers/types'
 import Button from 'components/shared/ul/Button'
 import Spinner from 'components/shared/ul/Spinner'
-import { setApproveSend, setTransferSend, getAllowance } from 'store/transfers/actions'
+import { setApproveSend, setTransferSend, getAllowance, setApproveSuccess } from 'store/transfers/actions'
 import { ApplicationState } from 'store'
 import { useContract } from 'config/ContractHook'
 import GlassCard from 'components/shared/ul/CardInput'
@@ -30,6 +30,7 @@ interface PropsFromDispatch {
     setApproveSend: typeof setApproveSend
     setTransferSend: typeof setTransferSend
     getAllowance: typeof getAllowance
+    setApproveSuccess: typeof setApproveSuccess
 }
 
 
@@ -58,16 +59,17 @@ const TransferCard: React.FC<AllProps> = (props) => {
     const contract = useContract(token.address)
 
     useEffect(() => {
-        if (getIndexInAllowances() === -1 && delegateWallet){
+        if (delegateWallet){
             const payload: IAllowance  = {
                 contract: contract,
                 delegateWallet: delegateWallet,
                 token: token,
                 userAddress: userAddress
             }
+            console.log('PAYLOAD!: ', payload)
             getAllowance(payload)
         }
-    }, [delegateWallet, userAddress, contract])
+    }, [delegateWallet, userAddress, loadingApprove, loadingTransfer])
 
     
    const handleAmountValue = (value:string) => {
@@ -118,7 +120,7 @@ const TransferCard: React.FC<AllProps> = (props) => {
         const tx = {
             amount: amount.value,
             contract: contract,
-            targetWallet: delegateWallet,
+            targetWallet: targetWallet,
             token: token,
             userAddress: userAddress,
             signingProvider: signingProvider,
@@ -149,6 +151,7 @@ const TransferCard: React.FC<AllProps> = (props) => {
     
 
     const handleAllowance = () => {
+        console.log("allowances in hanldeAllowances: ", allowances)
         if(getIndexInAllowances() !== -1 && delegateWallet){
             return `You can transfer up to ${allowances[getIndexInAllowances()].amount} ${allowances[getIndexInAllowances()].name}.`
         } else {
@@ -223,7 +226,8 @@ const mapStateToProps = ({ transfers, wallet }: ApplicationState) => ({
 const mapDispatchToProps: PropsFromDispatch = {
     setApproveSend: setApproveSend,
     setTransferSend: setTransferSend,
-    getAllowance: getAllowance
+    getAllowance: getAllowance,
+    setApproveSuccess: setApproveSuccess
 }
 
 export default connect(

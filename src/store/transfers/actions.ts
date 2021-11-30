@@ -11,5 +11,6 @@ export const setTransferFail = (error: any) => action(TransferActionTypes.SET_TR
 export const setApproveSuccess = () => action(TransferActionTypes.SET_APPROVE_SUCCESS)
 export const setApproveFail = (error: any) => action(TransferActionTypes.SET_APPROVE_FAIL, error)
 export const getAllowance = (data: IAllowance) => action(TransferActionTypes.GET_ALLOWANCE, data)
-export const setAllowanceSuccess = (data: IApproved[]) => action(TransferActionTypes.SET_ALLOWANCE_SUCCESS, data)
+export const setAllowanceSuccess = (data: IApproved) => action(TransferActionTypes.SET_ALLOWANCE_SUCCESS, data)
+export const setNewAllowance = (data: IApproved[]) => action(TransferActionTypes.SET_ALLOWANCE_SUCCESS_NEW, data)
 export const setAllowanceFail = (error: any) => action(TransferActionTypes.SET_ALLOWANCE_FAIL, error)

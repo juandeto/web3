@@ -1,7 +1,7 @@
 import { all, call, fork, put, takeEvery, select } from 'redux-saga/effects'
 import * as api from '../../utils/apis'
 import { TransferActionTypes, ActionTransfer, IApproved } from './types'
-import {setTransferSuccess, setTransferFail, setApproveSuccess, setApproveFail, setAllowanceFail,setAllowanceSuccess } from './actions'
+import {setTransferSuccess, setTransferFail, setApproveSuccess, setApproveFail, setAllowanceFail,setAllowanceSuccess, setNewAllowance } from './actions'
 import { ApplicationState } from 'store'
 import * as ethers from 'ethers'
 
@@ -15,7 +15,7 @@ function* approve(action: ActionTransfer) {
   try {
     // To call async functions, use redux-saga's `call()`.
     const  res: ResponseTransfer = yield call(api.approveToken, action.payload)
-
+    console.log("RES APPROVE: ", res)
     if(res.error instanceof Error){
       yield put(setApproveFail(res.error))
     } else{
@@ -53,6 +53,7 @@ function* sendTransfer(action: ActionTransfer) {
     const allowancesArray = state.transfers.allowances
     try {
       const  res: ethers.BigNumberish | TypeError = yield call(action.payload.contract?.allowance, action.payload.userAddress, state.transfers.delegateWallet)
+      console.log("RES ALLOWANCES: ", res)
 
       if(res instanceof Error){
   
@@ -65,15 +66,13 @@ function* sendTransfer(action: ActionTransfer) {
           name: token.name,
           amount: ethers.utils.formatUnits(res, token.decimals)
         }
-
         if(indexCurrent === -1){
-          newAllowances = [ ...allowancesArray,formatted ]
+          yield put(setAllowanceSuccess(formatted))
         } else{
-          newAllowances = [ ...allowancesArray ]
-          newAllowances[indexCurrent].amount = ethers.utils.formatUnits(res, token.decimals)
+          newAllowances = [ ...allowancesArray ].splice(indexCurrent, 0)
+          newAllowances = [ ...newAllowances, formatted ]
+          yield put(setNewAllowance(newAllowances))
         }
-
-        yield put(setAllowanceSuccess(newAllowances))
   
       }
   

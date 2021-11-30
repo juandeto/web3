@@ -8,7 +8,7 @@ export const initialState: WalletBalances =  {
         name: 'Usdc',
         balance: '0',
         address: process.env.REACT_APP_USDCD_ADDRESS as string,
-        decimals: 18
+        decimals: 6
       },
       {
         name: 'Dai',

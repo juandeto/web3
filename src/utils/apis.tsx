@@ -1,30 +1,5 @@
-import { PayloadBalance } from '../store/userWallet/types'
 import { ITransaction } from 'store/transfers/types'
 import * as ethers from 'ethers'
-
-
-// export async function getBalance( payload: PayloadBalance) {
-//   const {
-//     contract,
-//     userAddress,
-//     token
-//   } = payload
-  
-//     try {
-//       console.log("payload: ", payload)
-
-//       return  contract?.balanceOf()
-
-//     } catch (error) {
-//       console.log(error)
-
-//       return {
-//         data: "",
-//         error: error
-//       }
-//     }
-//   }
-
 
 
 export async function approveToken(payload: ITransaction) {
@@ -44,10 +19,9 @@ export async function approveToken(payload: ITransaction) {
 
       const approval = await connected.approve(targetWallet, numberOfTokens)
       await approval.wait()
-     const allowance = await connected.allowance(userAddress, targetWallet)
-      
+
       return {
-        data: allowance,
+        data: approval,
         error: null
       }
   } catch (error) {
@@ -78,7 +52,7 @@ export async function transferFrom(payload: ITransaction) {
       const signer:any = signingProvider?.getSigner(userAddress)
       const connected = contract.connect(signer)
       console.log('connected: ', connected, numberOfTokens, targetWallet)
-      const approval = await connected.transferFrom(userAddress, targetWallet, numberOfTokens)
+      const approval = await connected.transferFrom(token.address, targetWallet, numberOfTokens)
       await approval.wait()
       console.log('approvall: ', approval)
       return {

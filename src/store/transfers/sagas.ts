@@ -1,7 +1,7 @@
 import { all, call, fork, put, takeEvery, select } from 'redux-saga/effects'
 import * as api from '../../utils/apis'
 import { TransferActionTypes, ActionTransfer, IApproved } from './types'
-import {setTransferSuccess, setTransferFail, setApproveSuccess, setApproveFail } from './actions'
+import {setTransferSuccess, setTransferFail, setApproveSuccess, setApproveFail, setAllowanceFail,setAllowanceSuccess } from './actions'
 import { ApplicationState } from 'store'
 import * as ethers from 'ethers'
 
@@ -12,8 +12,6 @@ type ResponseTransfer = {
 }
 
 function* approve(action: ActionTransfer) {
-  const { token, amount } = action.payload
-  const state: ApplicationState = yield select(state => state);
   try {
     // To call async functions, use redux-saga's `call()`.
     const  res: ResponseTransfer = yield call(api.approveToken, action.payload)
@@ -21,38 +19,10 @@ function* approve(action: ActionTransfer) {
 
     if(res.error instanceof Error){
       yield put(setApproveFail(res.error))
+    } else{
+      yield put(setApproveSuccess())
     }
-
-      const cloneApproved = [ ...state.transfers.approved ]
-
-
-    //if the coin was never approved we create the obj, else we update the obj
-     if(cloneApproved.findIndex(item => item.name === token.name) === -1){
-       const newApproved: IApproved = {
-         name: token.name,
-         approved: true,
-         amountApproved: ethers.utils.formatUnits(res.data, token.decimals)
-       }
-       const updated: IApproved[] = [ ...cloneApproved, newApproved ]
-        yield put(setApproveSuccess(updated))
-     } else {//if the amount is zero, it means we reset the amount allowed
-      const updatedApproved = cloneApproved.map((t:IApproved) => {
-        if(t.name === token.name && amount === "0"){
-            t.approved = false
-            t.amountApproved = amount
-        }
-        if(t.name === token.name && amount !== "0"){
-          t.approved = true
-          t.amountApproved = ethers.utils.formatUnits(res.data, token.decimals)
-      }
-        return t
-      })
-
-       yield put(setApproveSuccess(updatedApproved))
-     }
      
-    
-
 } catch (err) {
       yield(setApproveFail(err))
     }
@@ -79,11 +49,52 @@ function* sendTransfer(action: ActionTransfer) {
   
   
 
+  function* allowances(action: ActionTransfer) {
+    const { token } = action.payload
+    const state: ApplicationState = yield select(state => state);
+    const allowancesArray = state.transfers.allowances
+    try {
+      console.log('contract: ', action.payload.contract)
+      const  res: ethers.BigNumberish | TypeError = yield call(action.payload.contract?.allowance, action.payload.userAddress, state.transfers.delegateWallet)
+      console.log('RES ALLOWANCES: ', res)
 
+      if(res instanceof Error){
+  
+        yield put(setAllowanceFail(res))
+  
+      }else {
+        let newAllowances = []
+        const indexCurrent = allowancesArray.findIndex(t => t.name === token.name)
+        const formatted: IApproved = {
+          name: token.name,
+          amount: ethers.utils.formatUnits(res, token.decimals)
+        }
+
+        if(indexCurrent === -1){
+          newAllowances = [ ...allowancesArray,formatted ]
+        } else{
+          newAllowances = [ ...allowancesArray ]
+          newAllowances[indexCurrent].amount = ethers.utils.formatUnits(res, token.decimals)
+        }
+
+        yield put(setAllowanceSuccess(newAllowances))
+  
+      }
+  
+    } catch (err) {
+  
+        yield(setAllowanceFail(err))
+  
+  }
+  }
 
 
 function* watchApproveRequest() {
     yield takeEvery(TransferActionTypes.SET_APPROVE_SEND, approve)
+}
+
+function* watchAllowanceRequest() {
+  yield takeEvery(TransferActionTypes.GET_ALLOWANCE, allowances)
 }
   
   
@@ -93,7 +104,7 @@ function* watchTransferRequest() {
   
 
 function* transfersSaga() {
-  yield all([fork(watchApproveRequest), fork(watchTransferRequest)])
+  yield all([fork(watchApproveRequest), fork(watchTransferRequest), fork(watchAllowanceRequest)])
 }
 
 export default transfersSaga

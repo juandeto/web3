@@ -5,8 +5,8 @@
     position: relative;
     .tooltip {
         position: absolute;
-        left: 80%;
-        bottom: 100%;
+        left: 0%;
+        top: 100%;
         visibility: hidden;
         background: rgba($primary, 1);
         color: $background;

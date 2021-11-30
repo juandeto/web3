@@ -60,7 +60,6 @@ function* sendTransfer(action: ActionTransfer) {
         yield put(setAllowanceFail(res))
   
       }else {
-        let newAllowances = []
         const indexCurrent = allowancesArray.findIndex(t => t.name === token.name)
         const formatted: IApproved = {
           name: token.name,
@@ -69,18 +68,16 @@ function* sendTransfer(action: ActionTransfer) {
         if(indexCurrent === -1){
           yield put(setAllowanceSuccess(formatted))
         } else{
-          newAllowances = [ ...allowancesArray ].splice(indexCurrent, 0)
-          newAllowances = [ ...newAllowances, formatted ]
-          yield put(setNewAllowance(newAllowances))
+          const spliced = [ ...allowancesArray ]
+          spliced.splice(indexCurrent, 1, formatted)
+          yield put(setNewAllowance(spliced))
         }
   
       }
   
     } catch (err) {
-  
         yield(setAllowanceFail(err))
-  
-  }
+    }
   }
 
 

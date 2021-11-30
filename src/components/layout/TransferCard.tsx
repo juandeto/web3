@@ -130,7 +130,7 @@ const TransferCard: React.FC<AllProps> = (props) => {
         setAmount({...amount, value: ""})
     }
 
-    const editApproved = () => {
+    const resetApproved = () => {
         const tx = {
             amount: "0",
             contract: contract,
@@ -189,9 +189,9 @@ const TransferCard: React.FC<AllProps> = (props) => {
                                 getIndexInAllowances() !== -1 && delegateWallet && allowances[getIndexInAllowances()].amount !== "0.0"?
                                 <Button 
                                 disabled={hanldeDisableApprove()}
-                                label={`${loadingApprove? "Loading...": "EDIT ALOWANCE"}`}
+                                label={`${loadingApprove? "Loading...": "RESET ALLOWANCE"}`}
                                 type="primary" 
-                                cta={() => editApproved()}/>:
+                                cta={() => resetApproved()}/>:
                                 <Button 
                                 disabled={hanldeDisableApprove()}
                                 label={`${loadingApprove? "Loading...": "APPROVE"}`}

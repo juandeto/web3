@@ -66,7 +66,7 @@ const TransferCard: React.FC<AllProps> = (props) => {
                 token: token,
                 userAddress: userAddress
             }
-            console.log('PAYLOAD!: ', payload)
+
             getAllowance(payload)
         }
     }, [delegateWallet, userAddress, loadingApprove, loadingTransfer])
@@ -151,7 +151,7 @@ const TransferCard: React.FC<AllProps> = (props) => {
     
 
     const handleAllowance = () => {
-        console.log("allowances in hanldeAllowances: ", allowances)
+        
         if(getIndexInAllowances() !== -1 && delegateWallet){
             return `You can transfer up to ${allowances[getIndexInAllowances()].amount} ${allowances[getIndexInAllowances()].name}.`
         } else {

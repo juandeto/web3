@@ -58,7 +58,6 @@ export async function transferFrom(payload: ITransaction) {
         error: null
       }
   } catch (error) {
-      alert("failed transfer!!")
       return {
         data: "",
         error: error

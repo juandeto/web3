@@ -5,12 +5,6 @@ const rpcUrl = 'https://mainnet.infura.io/v3/21BqZ4Gv7tsZ8mxmpZFmb0rr3q0';
 const walletOptions = [
     { walletName: 'metamask' },
     {
-      walletName: 'trezor',
-      appUrl: 'https://reactdemo.blocknative.com',
-      email: 'aaron@blocknative.com',
-      rpcUrl,
-    },
-    {
       walletName: 'ledger',
       rpcUrl,
     },
@@ -22,10 +16,8 @@ const walletOptions = [
       walletName: 'portis',
       apiKey: 'b2b7586f-2b1e-4c30-a7fb-c2d1533b153b',
     },
-    { walletName: 'fortmatic', apiKey: 'pk_test_886ADCAB855632AA' },
     { walletName: 'unilogin' },
     { walletName: 'torus' },
-    { walletName: 'squarelink', apiKey: '87288b677f8cfb09a986' },
     { walletName: 'authereum', disableNotifications: true },
     { walletName: 'trust', rpcUrl },
     {

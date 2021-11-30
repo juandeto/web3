@@ -56,7 +56,7 @@ const TransferCard: React.FC<AllProps> = (props) => {
         allowances
     } = props
     const contract = useContract(token.address)
-    console.log('ALLOWANCES: ', allowances)
+
     useEffect(() => {
         if (getIndexInAllowances() === -1 && delegateWallet){
             const payload: IAllowance  = {
@@ -65,7 +65,6 @@ const TransferCard: React.FC<AllProps> = (props) => {
                 token: token,
                 userAddress: userAddress
             }
-            console.log('busca el amount permitido: ')
             getAllowance(payload)
         }
     }, [delegateWallet, userAddress, contract])
@@ -82,7 +81,7 @@ const TransferCard: React.FC<AllProps> = (props) => {
 
    
    const validateAmount = (input: string) => {
-        if(!targetWallet){
+        if(!delegateWallet){
             return "You forgot to write your target wallet"
         }
         if(Number(token.balance) < Number(input)){
@@ -107,7 +106,8 @@ const TransferCard: React.FC<AllProps> = (props) => {
             targetWallet: targetWallet,
             token: token,
             userAddress: userAddress,
-            signingProvider: signingProvider
+            signingProvider: signingProvider,
+            delegateWallet: delegateWallet
         }
         setTransferSend(tx)
         setAmount({...amount, value: ""})
@@ -121,7 +121,8 @@ const TransferCard: React.FC<AllProps> = (props) => {
             targetWallet: delegateWallet,
             token: token,
             userAddress: userAddress,
-            signingProvider: signingProvider
+            signingProvider: signingProvider,
+            delegateWallet: delegateWallet
         }
         setApproveSend(tx)
         setAmount({...amount, value: ""})
@@ -134,7 +135,8 @@ const TransferCard: React.FC<AllProps> = (props) => {
             targetWallet: targetWallet,
             token: token,
             userAddress: userAddress,
-            signingProvider: signingProvider
+            signingProvider: signingProvider,
+            delegateWallet: delegateWallet
         }
         setApproveSend(tx)
         setAmount({...amount, value: ""})
@@ -147,7 +149,7 @@ const TransferCard: React.FC<AllProps> = (props) => {
     
 
     const handleAllowance = () => {
-        if(getIndexInAllowances() !== -1 ){
+        if(getIndexInAllowances() !== -1 && delegateWallet){
             return `You can transfer up to ${allowances[getIndexInAllowances()].amount} ${allowances[getIndexInAllowances()].name}.`
         } else {
             return "No allowance"
@@ -181,9 +183,9 @@ const TransferCard: React.FC<AllProps> = (props) => {
                         }
                         <div className="tranferCard_button">
                             {
-                                getIndexInAllowances() !== -1 ?
+                                getIndexInAllowances() !== -1 && delegateWallet && allowances[getIndexInAllowances()].amount !== "0.0"?
                                 <Button 
-                                disabled={!targetWallet}
+                                disabled={hanldeDisableApprove()}
                                 label={`${loadingApprove? "Loading...": "EDIT ALOWANCE"}`}
                                 type="primary" 
                                 cta={() => editApproved()}/>:

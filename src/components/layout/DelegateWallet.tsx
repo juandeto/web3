@@ -70,7 +70,7 @@ const DelegateWallet: React.FC<AllProps> = (props) => {
 
       return <>
                 <div className="walletTarget_container">
-                    <label className="walletTarget_label">Give someone control over amount of your tokens (token approve function)</label>
+                    <label className="walletTarget_label">Delegate address: give someone control over amount of your tokens</label>
                     <div className="walletTarget_actions">
                         <div className="walletTarget_value">
 

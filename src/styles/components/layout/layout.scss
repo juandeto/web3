@@ -50,7 +50,7 @@
 
 .walletTarget_container{
     padding: 4px;
-    width: 80%;
+    width: 45%;
     .walletTarget_label{
         text-align: left;
         font-size: $medium-font;
@@ -83,6 +83,7 @@
 .balances_wrapper{
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     margin: 0 8px;
     h3{
         font-size: $medium-font;

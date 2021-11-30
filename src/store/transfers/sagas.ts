@@ -15,7 +15,6 @@ function* approve(action: ActionTransfer) {
   try {
     // To call async functions, use redux-saga's `call()`.
     const  res: ResponseTransfer = yield call(api.approveToken, action.payload)
-    console.log('RES approve!: ', res)
 
     if(res.error instanceof Error){
       yield put(setApproveFail(res.error))
@@ -34,7 +33,6 @@ function* sendTransfer(action: ActionTransfer) {
     try {
       // To call async functions, use redux-saga's `call()`.
       const  res: ResponseTransfer = yield call(api.transferFrom, action.payload)
-      console.log('RES transfer!: ', res)
 
       if(res.error instanceof Error){
         yield put(setTransferFail(res.error))
@@ -54,9 +52,7 @@ function* sendTransfer(action: ActionTransfer) {
     const state: ApplicationState = yield select(state => state);
     const allowancesArray = state.transfers.allowances
     try {
-      console.log('contract: ', action.payload.contract)
       const  res: ethers.BigNumberish | TypeError = yield call(action.payload.contract?.allowance, action.payload.userAddress, state.transfers.delegateWallet)
-      console.log('RES ALLOWANCES: ', res)
 
       if(res instanceof Error){
   

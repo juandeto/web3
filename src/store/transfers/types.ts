@@ -25,14 +25,6 @@ export interface ActionTransfer {
 }
 
 
-export interface ITransaction {
-    amount: string
-    contract: Contract
-    targetWallet: string
-    token: TokenBalance,
-    userAddress?: string
-    signingProvider?: Web3Provider
-}
 
 export interface ITransaction {
     amount: string
@@ -41,6 +33,7 @@ export interface ITransaction {
     token: TokenBalance,
     userAddress?: string
     signingProvider?: Web3Provider
+    delegateWallet: string
 }
 
 export interface IAllowance {

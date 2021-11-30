@@ -23,11 +23,6 @@ const Account: React.FC = () => {
   return (
     <>
       <div>
-        {userAddress && (
-          <div>
-            <WalletWidget userAddress={userAddress} />
-          </div>
-        )}
         <div>
           {!signingProvider ? (
             <Button type="primary" cta={onSelectWallet} label="Connect your wallet"/>
